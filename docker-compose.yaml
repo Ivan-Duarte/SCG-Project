@@ -52,5 +52,16 @@ services:
     ports:
       - 8000:8000
 
+  frontend:
+    build:
+      context: ./frontend
+      target: development  # Para rodar no ambiente de desenvolvimento
+    container_name: frontend
+    volumes:
+      - ./frontend:/app  # Montar o código-fonte para permitir hot-reloading
+      - /app/node_modules  # Ignorar node_modules para evitar conflito entre host e container
+    ports:
+      - "3000:3000"
+
 volumes:
   postgres_data:
