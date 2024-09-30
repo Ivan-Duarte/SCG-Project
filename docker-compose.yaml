@@ -1,10 +1,47 @@
 services:
+  db:
+    image: postgres:16-bullseye  # Usando uma versão baseada no Debian, mais compatível
+    platform: linux/amd64
+    container_name: dbPostgres
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-d",
+          "scg_inventory_db",
+          "-U",
+          "scg_user"
+        ]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+    environment:
+      POSTGRES_DB: scg_inventory_db
+      POSTGRES_USER: scg_user
+      POSTGRES_PASSWORD: SCG_Db_2024!@safe
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+ 
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
   backend:
     build:
       context: backend
       target: backend
     env_file:
-      - /backend/.env
+      - ./backend/.env
     working_dir: /app
     restart: always
     container_name: backend
@@ -14,3 +51,6 @@ services:
       - 8000
     ports:
       - 8000:8000
+
+volumes:
+  postgres_data:
