@@ -18,12 +18,11 @@ services:
       retries: 5
       start_period: 30s
     environment:
-      POSTGRES_DB: scg_inventory_db
       POSTGRES_USER: scg_user
-      POSTGRES_PASSWORD: SCG_Db_2024!@safe
+      POSTGRES_PASSWORD: SCG_Db_2024safe  # Mesma senha que no .env
+      POSTGRES_DB: scg_inventory_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
  
@@ -51,6 +50,9 @@ services:
       - 8000
     ports:
       - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
 
   frontend:
     build:
