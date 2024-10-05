@@ -14,7 +14,7 @@ init_db()
 app = FastAPI()
 
 # Incluir o roteamento do inventário
-app.include_router(inventory_controller.router, prefix="/items", tags=["inventory"])
+app.include_router(inventory_controller.router, prefix="/items", tags=["Rotas de Itens"])
 
 @app.get("/")
 def index():
