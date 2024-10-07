@@ -9,15 +9,12 @@ from .db.init_db import init_db
 # Carregar o arquivo .env
 load_dotenv()
 
-
 init_db()
 
 app = FastAPI()
 
-origins = [
-    {env.get('REACT_APP_API_URL')},  # Permitir o frontend local
-    # Adicione outros domínios se necessário, como o domínio de produção
-]
+allowed_origins = env.get("ALLOWED_ORIGINS")
+origins = allowed_origins.split(",") if allowed_origins else []
 
 app.add_middleware(
     CORSMiddleware,
