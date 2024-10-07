@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from os import environ as env
 from dotenv import load_dotenv
 import os
@@ -12,6 +13,19 @@ load_dotenv()
 init_db()
 
 app = FastAPI()
+
+origins = [
+    {env.get('REACT_APP_API_URL')},  # Permitir o frontend local
+    # Adicione outros domínios se necessário, como o domínio de produção
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Incluir o roteamento do inventário
 app.include_router(inventory_controller.router, prefix="/items", tags=["Rotas de Itens"])
