@@ -35,7 +35,7 @@ services:
     depends_on:
       - db
 
-  backend:
+  backend01:
     build:
       context: backend
       target: backend
@@ -43,16 +43,60 @@ services:
       - ./backend/.env
     working_dir: /app
     restart: always
-    container_name: backend
+    container_name: backend01
     volumes:
       - ./backend:/app
+    environment:
+      - INSTANCE_ID=backend_01
     expose:
       - 8000
     ports:
-      - 8000:8000
+      - 8001:8000
     depends_on:
       db:
         condition: service_healthy
         
+  backend02:
+    build:
+      context: backend
+      target: backend
+    env_file:
+      - ./backend/.env
+    working_dir: /app
+    restart: always
+    container_name: backend02
+    volumes:
+      - ./backend:/app
+    environment:
+      - INSTANCE_ID=backend_02
+    expose:
+      - 8000
+    ports:
+      - 8002:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend03:
+    build:
+      context: backend
+      target: backend
+    env_file:
+      - ./backend/.env
+    working_dir: /app
+    restart: always
+    container_name: backend03
+    volumes:
+      - ./backend:/app
+    environment:
+      - INSTANCE_ID=backend_03
+    expose:
+      - 8000
+    ports:
+      - 8003:8000
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   postgres_data:

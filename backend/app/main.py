@@ -27,6 +27,6 @@ app.add_middleware(
 # Incluir o roteamento do inventário
 app.include_router(inventory_controller.router, prefix="/items", tags=["Rotas de Itens"])
 
-@app.get("/")
-def index():
-    return {"details": f"Hello, World! Senha de Ambiente = {env.get('MY_VARIABLE', 'Não encontrada')}"}
+@app.get("/status")
+def get_status():
+    return {"status": "ok", "message": f"Backend está funcionando corretamente! Instância: {env.get('INSTANCE_ID', 'Indefinido')}"}
